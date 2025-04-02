@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <title>Price Prediction Dashboard</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary: #64748b;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --light: #f8fafc;
+      --dark: #1e293b;
+      --border: #e2e8f0;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      background-color: #f1f5f9;
+      color: var(--dark);
+      line-height: 1.6;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    header {
+      background-color: white;
+      padding: 1.5rem 2rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+    }
+    
+    header h1 {
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 1.75rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    header p {
+      color: var(--secondary);
+      font-size: 1rem;
+    }
+    
+    .card {
+      background-color: white;
+      border-radius: 0.5rem;
+      box-shadow: var(--shadow);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .card-header {
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1rem;
+    }
+    
+    .card-header h2 {
+      color: var(--dark);
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    
+    .upload-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .form-label {
+      font-weight: 500;
+      color: var(--dark);
+    }
+    
+    .form-input {
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 0.375rem;
+      font-size: 1rem;
+      transition: border-color 0.15s ease-in-out;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    }
+    
+    .file-input-wrapper {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+    
+    .file-input {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    
+    .file-input-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background-color: var(--light);
+      border: 1px dashed var(--border);
+      border-radius: 0.375rem;
+      color: var(--secondary);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .file-input-button:hover {
+      background-color: #f1f5f9;
+      border-color: var(--primary);
+    }
+    
+    .file-input-button svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+    
+    .file-input-button.has-file {
+      background-color: rgba(16, 185, 129, 0.1);
+      border-color: var(--success);
+      color: var(--success);
+    }
+    
+    .input-form {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0.375rem;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+    }
+    
+    .btn-lg {
+      width: 100%;
+      padding: 0.875rem 1.5rem;
+      font-size: 1.125rem;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    
+    table th, table td {
+      border: 1px solid var(--border);
+      padding: 0.75rem;
+      text-align: left;
+    }
+    
+    table th {
+      background-color: #f8fafc;
+      font-weight: 600;
+    }
+    
+    table tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+    
+    .download-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background-color: #f1f5f9;
+      border-radius: 0.375rem;
+      color: var(--primary);
+      font-weight: 500;
+      text-decoration: none;
+      margin-top: 1rem;
+      transition: all 0.2s ease;
+    }
+    
+    .download-link:hover {
+      background-color: #e2e8f0;
+    }
+    
+    .download-link svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+    
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+    
+    .tab {
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--secondary);
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+    
+    .tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+    
+    .tab:hover:not(.active) {
+      color: var(--dark);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+
+    .alert {
+      padding: 0.75rem 1rem;
+      border-radius: 0.375rem;
+      margin-top: 1rem;
+    }
+
+    .alert-success {
+      background-color: rgba(16, 185, 129, 0.1);
+      border: 1px solid var(--success);
+      color: var(--success);
+    }
+
+    .alert-error {
+      background-color: rgba(239, 68, 68, 0.1);
+      border: 1px solid var(--danger);
+      color: var(--danger);
+    }
+
+    .file-name {
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+      color: var(--secondary);
+    }
+
+    .loading {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .loading.active {
+      display: flex;
+    }
+
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid var(--primary);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .chart-container {
+      height: 400px;
+      width: 100%;
+    }
+
+    .no-data {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 200px;
+      color: var(--secondary);
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+
+      .input-form {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Advanced Price Prediction Dashboard</h1>
+    <p>Upload data, analyze trends, and get accurate price predictions</p>
+  </header>
+
+  <div class="container">
+    <!-- Prediction Methods Tab System -->
+    <div class="card">
+      <div class="tabs">
+        <div class="tab active" data-tab="upload">CSV Upload</div>
+        <div class="tab" data-tab="manual">Manual Input</div>
+      </div>
+
+      <!-- CSV Upload Form -->
+      <div class="tab-content active" id="upload-tab">
+        <form id="upload-form" class="upload-form" enctype="multipart/form-data">
+          <div class="file-input-wrapper" id="file-input-wrapper">
+            <div class="file-input-button">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+              </svg>
+              <span>Upload CSV File</span>
+              <input type="file" id="csvFile" class="file-input" accept=".csv" required />
+            </div>
+          </div>
+          <div id="file-name" class="file-name"></div>
+          <button type="submit" class="btn btn-primary btn-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75l3 3m0 0l3-3m-3 3v-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Upload and Predict
+          </button>
+        </form>
+        <div id="upload-loading" class="loading">
+          <div class="spinner"></div>
+          <span>Processing data...</span>
+        </div>
+      </div>
+
+      <!-- Manual Input Form -->
+      <div class="tab-content" id="manual-tab">
+        <form id="prediction-form" class="input-form">
+          <div class="form-group">
+            <label class="form-label" for="competitor-price">Competitor Price</label>
+            <input type="number" id="competitor-price" name="Competitor_Price" class="form-input" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="marketing-spend">Marketing Spend</label>
+            <input type="number" id="marketing-spend" name="Marketing_Spend" class="form-input" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="economic-index">Economic Index</label>
+            <input type="number" id="economic-index" name="Economic_Index" class="form-input" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="holiday-week">Holiday Week (0/1)</label>
+            <input type="number" id="holiday-week" name="Holiday_Week" min="0" max="1" step="1" class="form-input" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="seasonality-price">Seasonality Price</label>
+            <input type="number" id="seasonality-price" name="Seasonality_Price" class="form-input" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="quantity">Quantity</label>
+            <input type="number" id="quantity" name="Quantity" class="form-input" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="demand-index">Demand Index</label>
+            <input type="number" id="demand-index" name="Demand_Index" class="form-input" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="discount-percentage">Discount Percentage</label>
+            <input type="number" id="discount-percentage" name="Discount_Percentage" class="form-input" required />
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75l3 3m0 0l3-3m-3 3v-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Predict Price
+          </button>
+        </form>
+        <div id="manual-loading" class="loading">
+          <div class="spinner"></div>
+          <span>Calculating prediction...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Prediction Results -->
+    <div class="card">
+      <div class="card-header">
+        <h2>Prediction Results</h2>
+      </div>
+      <div id="prediction-result">
+        <div class="no-data">Upload data or input values to see predictions</div>
+      </div>
+      <div id="download-container"></div>
+    </div>
+
+    <!-- Performance Dashboard -->
+    <div class="card">
+      <div class="card-header">
+        <h2>Model Performance</h2>
+      </div>
+      <div id="performance-dashboard" class="chart-container"></div>
+    </div>
+  </div>
+
+  <script>
+    // Tab Navigation
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.tab;
+        
+        // Update active tab
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        // Update active content
+        tabContents.forEach(content => content.classList.remove('active'));
+        document.getElementById(`${target}-tab`).classList.add('active');
+      });
+    });
+
+    // File Upload Handling
+    const fileInput = document.getElementById('csvFile');
+    const fileInputWrapper = document.getElementById('file-input-wrapper');
+    const fileNameDisplay = document.getElementById('file-name');
+    
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files.length > 0) {
+        const fileName = fileInput.files[0].name;
+        fileNameDisplay.textContent = `Selected file: ${fileName}`;
+        fileInputWrapper.querySelector('.file-input-button').classList.add('has-file');
+      } else {
+        fileNameDisplay.textContent = '';
+        fileInputWrapper.querySelector('.file-input-button').classList.remove('has-file');
+      }
+    });
+
+    // CSV Upload Form
+    document.getElementById('upload-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      if (!fileInput.files.length) {
+        alert('Please select a CSV file');
+        return;
+      }
+      
+      const loadingIndicator = document.getElementById('upload-loading');
+      loadingIndicator.classList.add('active');
+      
+      const formData = new FormData();
+      formData.append('file', fileInput.files[0]);
+      
+      // Predict and Download CSV
+      axios.post('http://127.0.0.1:5000/predict', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        responseType: 'blob'
+      })
+      .then(response => {
+        loadingIndicator.classList.remove('active');
+        
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const downloadContainer = document.getElementById('download-container');
+        downloadContainer.innerHTML = `
+          <a href="${url}" download="predicted_prices.csv" class="download-link">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M7.5 7.5h-.75A2.25 2.25 0 004.5 9.75v7.5a2.25 2.25 0 002.25 2.25h7.5a2.25 2.25 0 002.25-2.25v-7.5a2.25 2.25 0 00-2.25-2.25h-.75m-6 3.75h6V4.5m-6 6.75l3 3m0 0l3-3m-3 3V1.5" />
+            </svg>
+            Download Predictions CSV
+          </a>
+        `;
+        
+        // Display CSV Data as Table
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const csvData = e.target.result;
+          displayCSVAsTable(csvData);
+        };
+        reader.readAsText(response.data);
+        
+        // Update Performance Dashboard
+        fetchPerformanceMetrics();
+      })
+      .catch(error => {
+        loadingIndicator.classList.remove('active');
+        document.getElementById('prediction-result').innerHTML = `
+          <div class="alert alert-error">
+            <strong>Error:</strong> ${error.response ? error.response.data.error : error.message}
+          </div>
+        `;
+      });
+    });
+
+    // Manual Input Form
+    document.getElementById('prediction-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const loadingIndicator = document.getElementById('manual-loading');
+      loadingIndicator.classList.add('active');
+      
+      const formData = new FormData(this);
+      const jsonData = {};
+      
+      for (const [key, value] of formData.entries()) {
+        jsonData[key] = parseFloat(value);
+      }
+      
+      axios.post('http://127.0.0.1:5000/predict_single', jsonData)
+        .then(response => {
+          loadingIndicator.classList.remove('active');
+          
+          const result = response.data;
+          document.getElementById('prediction-result').innerHTML = `
+            <div class="alert alert-success">
+              <strong>Predicted Price:</strong> $${parseFloat(result.predicted_price).toFixed(2)}
+            </div>
+          `;
+          
+          // Update Performance Dashboard
+          fetchPerformanceMetrics();
+        })
+        .catch(error => {
+          loadingIndicator.classList.remove('active');
+          document.getElementById('prediction-result').innerHTML = `
+            <div class="alert alert-error">
+              <strong>Error:</strong> ${error.response ? error.response.data.error : error.message}
+            </div>
+          `;
+        });
+    });
+
+    // Function to Display CSV as Table
+    function displayCSVAsTable(csvData) {
+      Papa.parse(csvData, {
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+          const data = results.data;
+          
+          if (data.length === 0) {
+            document.getElementById('prediction-result').innerHTML = '<div class="no-data">No data available</div>';
+            return;
+          }
+          
+          let tableHTML = '<div class="table-responsive"><table>';
+          
+          // Create table header
+          tableHTML += '<thead><tr>';
+          Object.keys(data[0]).forEach(key => {
+            tableHTML += `<th>${key}</th>`;
+          });
+          tableHTML += '</tr></thead>';
+          
+          // Create table body
+          tableHTML += '<tbody>';
+          data.forEach(row => {
+            tableHTML += '<tr>';
+            Object.values(row).forEach(value => {
+              // Format numbers with 2 decimal places if they are numeric
+              const formattedValue = !isNaN(parseFloat(value)) && isFinite(value) 
+                ? parseFloat(value).toFixed(2) 
+                : value;
+              tableHTML += `<td>${formattedValue}</td>`;
+            });
+            tableHTML += '</tr>';
+          });
+          tableHTML += '</tbody></table></div>';
+          
+          document.getElementById('prediction-result').innerHTML = tableHTML;
+        }
+      });
+    }
+
+    // Function to Fetch Performance Metrics
+    function fetchPerformanceMetrics() {
+      axios.get('http://127.0.0.1:5000/performance')
+        .then(response => {
+          const metrics = response.data;
+          
+          // Create a more visually appealing bar chart
+          const data = [{
+            x: Object.keys(metrics),
+            y: Object.values(metrics),
+            type: 'bar',
+            marker: {
+              color: ['#2563eb', '#10b981', '#f59e0b'],
+              line: {
+                color: '#ffffff',
+                width: 1
+              }
+            }
+          }];
+          
+          const layout = {
+            title: 'Model Performance Metrics',
+            font: {
+              family: 'Inter, sans-serif'
+            },
+            bargap: 0.3,
+            bargroupgap: 0.1,
+            plot_bgcolor: '#ffffff',
+            paper_bgcolor: '#ffffff',
+            margin: {t: 50, r: 30, b: 80, l: 80},
+            xaxis: {
+              title: 'Metric',
+              tickangle: -45
+            },
+            yaxis: {
+              title: 'Value',
+              gridcolor: '#f1f5f9'
+            }
+          };
+          
+          const config = {
+            responsive: true,
+            displayModeBar: false
+          };
+          
+          Plotly.newPlot('performance-dashboard', data, layout, config);
+        })
+        .catch(error => {
+          document.getElementById('performance-dashboard').innerHTML = `
+            <div class="alert alert-error">
+              <strong>Error:</strong> ${error.response ? error.response.data.error : error.message}
+            </div>
+          `;
+        });
+    }
+
+    // Initialize Performance Dashboard on page load
+    fetchPerformanceMetrics();
+  </script>
+<center>
+    <button onclick="window.location.href='search.html'" 
+      style="background-color: #4CAF50; 
+      color: white; 
+      padding: 12px 24px; 
+      border: none; 
+      border-radius: 4px; 
+      cursor: pointer; 
+      font-size: 16px; 
+      font-weight: bold; 
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
+      transition: all 0.3s ease;">Go to Store</button>
+  </center>
+</body>
+</html>

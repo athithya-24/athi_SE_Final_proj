@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Forgot Password</title>
+    <style>
+        body { font-family: Arial; text-align: center; padding: 20px; }
+        input { margin: 10px; padding: 8px; width: 200px; }
+        button { padding: 8px 16px; }
+        #otp-section, #reset-section { display: none; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h2>Forgot Password</h2>
+    
+    <div id="email-section">
+        <input type="email" id="user-email" placeholder="Enter your email" required />
+        <button onclick="requestOtp()">Send Request</button>
+    </div>
+
+    <div id="otp-section">
+        <p>Enter OTP sent by admin:</p>
+        <input type="text" id="otp-input" placeholder="Enter OTP" required />
+        <button onclick="verifyOtp()">Verify OTP</button>
+    </div>
+
+    <div id="reset-section">
+        <p>Enter new password:</p>
+        <input type="password" id="new-password" placeholder="New Password" required />
+        <button onclick="resetPassword()">Reset Password</button>
+    </div>
+
+    <p id="message"></p>
+
+    <script>
+        function requestOtp() {
+            const email = document.getElementById('user-email').value;
+            fetch('/request_otp', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({email})
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('message').innerText = data.message;
+                if (data.status === 'success') {
+                    document.getElementById('otp-section').style.display = 'block';
+                }
+            });
+        }
+
+        function verifyOtp() {
+            const otp = document.getElementById('otp-input').value;
+            fetch('/verify_otp', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({otp})
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('message').innerText = data.message;
+                if (data.status === 'verified') {
+                    document.getElementById('reset-section').style.display = 'block';
+                }
+            });
+        }
+
+        function resetPassword() {
+            const newPassword = document.getElementById('new-password').value;
+            fetch('/reset_password', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({password: newPassword})
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('message').innerText = data.message;
+            });
+        }
+    </script>
+</body>
+</html>

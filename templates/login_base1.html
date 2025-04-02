@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/46f9deeee2.js" crossorigin="anonymous"></script>
+    <title>Login | DPP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rajdhani', sans-serif;
+        }
+        
+        :root {
+            --primary-color: #822727;
+            --secondary-color: #053443;
+            --accent-color: #e44242;
+            --light-color: #f8f8f8;
+            --dark-color: #333;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            background-image: url("{{ url_for('static', filename='images/q11.jpg') }}");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+        
+        .signin {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(231, 94, 94, 0.9));
+            padding: 35px 40px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            width: 380px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            transform: translateY(0);
+            transition: transform 0.4s ease-in-out, box-shadow 0.4s ease;
+            opacity: 0;
+        }
+        
+        .signin:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+        
+        .signin h3 {
+            color: var(--secondary-color);
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            letter-spacing: 0.5px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .signin h3::after {
+            content: '';
+            position: absolute;
+            width: 40%;
+            height: 3px;
+            background: var(--primary-color);
+            left: 30%;
+            bottom: -10px;
+            border-radius: 2px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .input-group label {
+            position: absolute;
+            left: 15px;
+            top: 17px;
+            color: #777;
+            font-size: 16px;
+            transition: var(--transition);
+            pointer-events: none;
+        }
+        
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+            top: -12px;
+            left: 10px;
+            font-size: 12px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(231, 94, 94, 0.9));
+            padding: 0 5px;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .signin input {
+            width: 100%;
+            padding: 15px 20px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: var(--transition);
+            background-color: rgba(255, 255, 255, 0.9);
+            outline: none;
+        }
+        
+        .signin input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(130, 39, 39, 0.2);
+        }
+        
+        .signin input::placeholder {
+            opacity: 0;
+        }
+        
+        .password-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .password-container input {
+            width: 100%;
+            padding-right: 45px;
+        }
+        
+        .password-container i {
+            position: absolute;
+            right: 15px;
+            cursor: pointer;
+            color: #777;
+            transition: var(--transition);
+            font-size: 18px;
+        }
+        
+        .password-container i:hover {
+            color: var(--primary-color);
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .login-btn:hover::before {
+            left: 100%;
+        }
+        
+        .login-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .login-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .signup-link {
+            margin-top: 20px;
+            color: var(--dark-color);
+            font-size: 16px;
+        }
+        
+        .signup-link a, .forgot-password {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            border-bottom: 1px dashed transparent;
+        }
+        
+        .signup-link a:hover, .forgot-password:hover {
+            color: var(--secondary-color);
+            border-bottom: 1px dashed var(--secondary-color);
+        }
+        
+        .forgot-password {
+            display: block;
+            text-align: right;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+        
+        .or-divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: #777;
+        }
+        
+        .or-divider::before,
+        .or-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #ddd;
+        }
+        
+        .or-divider span {
+            padding: 0 15px;
+            font-size: 14px;
+        }
+        
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 5px;
+        }
+        
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .social-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .social-btn i {
+            font-size: 20px;
+        }
+        
+        .facebook {
+            color: #3b5998;
+        }
+        
+        .google {
+            color: #db4437;
+        }
+        
+        .apple {
+            color: #000;
+        }
+        
+        .back-home {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            z-index: 2;
+            transition: var(--transition);
+        }
+        
+        .back-home i {
+            margin-right: 8px;
+        }
+        
+        .back-home:hover {
+            color: var(--accent-color);
+        }
+        
+        @media (max-width: 480px) {
+            .signin {
+                width: 90%;
+                padding: 25px;
+            }
+            
+            .signin h3 {
+                font-size: 24px;
+            }
+            
+            .signin input {
+                padding: 12px 15px;
+            }
+            
+            .login-btn {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="{{ url_for('dashboard') }}" class="back-home">
+        <i class="fas fa-home"></i> Back to Home
+    </a>
+    
+    <div class="signin">
+        <h3>Log into your Account</h3>
+        <form action="{{ url_for('login') }}" method="POST">
+            <div class="input-group">
+                <input type="text" id="username" name="username" placeholder=" " required>
+                <label for="username">Username</label>
+            </div>
+            
+            <div class="input-group">
+                <div class="password-container">
+                    <input type="password" id="password" name="password" placeholder=" " required>
+                    <label for="password">Password</label>
+                    <i class="fas fa-eye" id="togglePassword"></i>
+                </div>
+                <a class="forgot-password">Forgot Password?</a>
+            </div>
+            
+            <button type="submit" class="login-btn">Log in</button>
+            
+            <div class="or-divider">
+                <span>or</span>
+            </div>
+            
+            <div class="social-login">
+                <div class="social-btn facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </div>
+                <div class="social-btn google">
+                    <i class="fab fa-google"></i>
+                </div>
+                <div class="social-btn apple">
+                    <i class="fab fa-apple"></i>
+                </div>
+            </div>
+            
+            <div class="signup-link">
+                Don't have an account? <a href="{{ url_for('register') }}">Sign up</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle password visibility
+            const togglePassword = document.querySelector("#togglePassword");
+            const password = document.querySelector("#password");
+        
+            if (togglePassword && password) {
+                togglePassword.addEventListener("click", function () {
+                    const type = password.getAttribute("type") === "password" ? "text" : "password";
+                    password.setAttribute("type", type);
+                    this.classList.toggle("fa-eye-slash");
+                });
+            }
+            
+            // Form animation
+            const signin = document.querySelector('.signin');
+            if (signin) {
+                setTimeout(function() {
+                    signin.style.opacity = '1';
+                    signin.style.transform = 'translateY(0)';
+                    signin.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                }, 300);
+            }
+        });
+    </script>
+</body>
+</html>

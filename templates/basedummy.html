@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/46f9deeee2.js" crossorigin="anonymous"></script>
+    <title>DPP - Dynamic Price Positioning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rajdhani', sans-serif;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background-color: #f8f8f8;
+            line-height: 1.6;
+        }
+        
+        .header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #822727;
+            color: #fff;
+            width: 100%;
+            position: fixed;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        #h1 {
+            font-size: 50px;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 2px;
+        }
+        
+        .h2 {
+            display: flex;
+            flex-direction: row;
+            column-gap: 30px;
+            padding-top: 5px;
+        }
+        
+        .h2_1 {
+            text-decoration: none;
+            color: #fff;
+            font-size: 22px;
+            font-weight: 600;
+            position: relative;
+            padding: 5px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .h2_1:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            bottom: 0;
+            left: 0;
+            background-color: rgb(223, 60, 60);
+            transition: width 0.3s ease;
+        }
+        
+        .h2_1:hover {
+            color: rgb(255, 255, 255);
+        }
+        
+        .h2_1:hover:after {
+            width: 100%;
+        }
+        
+        .h3 {
+            display: flex;
+            flex-direction: row;
+            padding-top: 5px;
+        }
+        
+        .h3_1 {
+            text-decoration: none;
+            color: #fff;
+            font-size: 22px;
+            font-weight: 600;
+            background-color: rgb(223, 60, 60);
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .h3_1:hover {
+            background-color: #fff;
+            color: rgb(223, 60, 60);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .header:hover {
+            background-color: #053443;
+        }
+        
+        .main-title {
+            color: #053443;
+            font-size: 42px;
+            padding-top: 140px;
+            padding-bottom: 30px;
+            text-align: center;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .main-title:after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 4px;
+            background-color: #822727;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+        
+        .point1 {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+            margin: 60px auto;
+            max-width: 1200px;
+            padding: 0 20px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .point1:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .point2 {
+            display: flex;
+            flex-direction: column;
+            padding: 30px;
+            flex: 1;
+        }
+        
+        .point3 {
+            color: #053443;
+            font-size: 32px;
+            padding-bottom: 20px;
+            font-weight: 600;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .point3:after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 3px;
+            background-color: rgb(223, 60, 60);
+            bottom: 15px;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+        
+        .point1:hover .point3 {
+            color: rgb(223, 60, 60);
+            transform: translateX(10px);
+        }
+        
+        .point1:hover .point3:after {
+            width: 80px;
+        }
+        
+        .point-text {
+            font-size: 18px;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        .image-container {
+            width: 450px;
+            height: 320px;
+            overflow: hidden;
+            border-radius: 10px;
+            position: relative;
+            margin: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .image-container:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to right, rgba(0,0,0,0.05), transparent);
+            pointer-events: none;
+        }
+        
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .image-container:hover img {
+            transform: scale(1.05);
+        }
+        
+        .image-scroll {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .image-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .image-scroll img {
+            flex: 0 0 100%;
+            scroll-snap-align: center;
+        }
+        
+        .foot {
+            background-color: #822727;
+            margin-top: 80px;
+            position: relative;
+            padding-bottom: 20px;
+        }
+        
+        .foot:before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background-color: #822727;
+            clip-path: polygon(0 100%, 100% 100%, 50% 0);
+        }
+        
+        .foot1 {
+            padding-top: 50px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            color: white;
+            min-height: 250px;
+            max-width: 1200px;
+            margin: 0 auto;
+            font-size: 20px;
+        }
+        
+        .foot2 {
+            display: flex;
+            flex-direction: column;
+            row-gap: 15px;
+        }
+        
+        .foot-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .foot-title:after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 3px;
+            background-color: #fff;
+            bottom: 0;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+        
+        .foot2:hover .foot-title:after {
+            width: 60px;
+        }
+        
+        .foot:hover {
+            background-color: #053443;
+        }
+        
+        .foot1_1 {
+            text-decoration: none;
+            color: #fff;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            position: relative;
+            padding-left: 0;
+        }
+        
+        .foot1_1:before {
+            content: '→';
+            position: absolute;
+            left: -20px;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .foot1_1:hover {
+            padding-left: 20px;
+            color: rgb(223, 60, 60);
+        }
+        
+        .foot1_1:hover:before {
+            left: 0;
+            opacity: 1;
+        }
+        
+        .copyright {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 992px) {
+            .point1 {
+                flex-direction: column;
+                margin: 40px 20px;
+            }
+            
+            .image-container {
+                width: 100%;
+                margin: 0 0 20px 0;
+            }
+            
+            .foot1 {
+                flex-direction: column;
+                padding: 30px;
+                row-gap: 30px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                padding: 10px;
+            }
+            
+            .h2, .h3 {
+                margin-top: 15px;
+            }
+            
+            .main-title {
+                padding-top: 180px;
+                font-size: 32px;
+            }
+            
+            #h1 {
+                font-size: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <span id="h1">DPP</span>
+        </div>
+        <div class="h2">
+            <div><a href="base.html" class="h2_1">Home</a></div>
+            <div><a href="store.html" class="h2_1">Store</a></div>
+            <div><a href="blog.html" class="h2_1">Blog</a></div>
+            <div><a href="Contact.html" class="h2_1">Contact</a></div>
+        </div>
+        <div class="h3">
+            <div><a href="login_base.html" class="h3_1">Login/Sign Up</a></div>
+        </div>
+    </div>
+    
+    <h4 class="main-title">Stay Ahead with Smart Pricing Strategies!</h4>
+    
+    <div class="point1">
+        <div class="point2">
+            <h3 class="point3">Real-time Price Monitoring</h3>
+            <p class="point-text">Track and adjust your product prices dynamically as market conditions change. Real-time monitoring allows you to respond quickly to competitor pricing, demand fluctuations, and other external factors that affect pricing.</p>
+        </div>
+        <div class="image-container">
+            <div class="image-scroll">
+                <img src="q2.jpg" alt="Real-time Price Monitoring">
+                <img src="q3.jpg" alt="Price Monitoring">
+                <img src="q4.jpeg" alt="Monitoring Tools"> 
+                <img src="q1.jpg" alt="Price Analysis">
+                <img src="q7.jpg" alt="Market Monitoring">
+                <img src="q8.jpg" alt="Price Tracking">
+                <img src="q9.jpg" alt="Data Monitoring">
+                <img src="q10.jpg" alt="Market Analysis">
+            </div>
+        </div>
+    </div>
+    
+    <div class="point1">
+        <div class="image-container">
+            <div class="image-scroll">
+                <img src="q3.jpg" alt="Market Trend Analysis">
+                <img src="q2.jpg" alt="Trend Analysis">
+                <img src="q4.jpeg" alt="Market Analysis"> 
+                <img src="q1.jpg" alt="Data Analysis">
+                <img src="q7.jpg" alt="Market Trends">
+                <img src="q8.jpg" alt="Trend Tracking">
+                <img src="q9.jpg" alt="Data Trends">
+                <img src="q10.jpg" alt="Analysis Tools">
+            </div>
+        </div>
+        <div class="point2">
+            <h3 class="point3">Market Trend Analysis</h3>
+            <p class="point-text">Analyze historical and current market data to identify pricing patterns, consumer preferences, and demand shifts. This analysis helps predict future price movements and ensures your pricing strategy aligns with market trends.</p>
+        </div>
+    </div>
+    
+    <div class="point1">
+        <div class="point2">
+            <h3 class="point3">Competitor Price Comparison</h3>
+            <p class="point-text">Monitor and compare your prices with those of your competitors. This allows you to adjust pricing strategies to stay competitive, attract customers, and maintain profitability in a constantly evolving market landscape.</p>
+        </div>
+        <div class="image-container">
+            <div class="image-scroll">
+                <img src="q4.jpeg" alt="Competitor Price Comparison"> 
+                <img src="q2.jpg" alt="Price Comparison">
+                <img src="q3.jpg" alt="Competitor Analysis">
+                <img src="q1.jpg" alt="Market Comparison">
+                <img src="q7.jpg" alt="Competition Analysis">
+                <img src="q8.jpg" alt="Price Tracking">
+                <img src="q9.jpg" alt="Market Data">
+                <img src="q10.jpg" alt="Analysis Tools">
+            </div>
+        </div>
+    </div>
+    
+    <div class="point1">
+        <div class="image-container">
+            <div class="image-scroll">
+                <img src="q7.jpg" alt="Pricing Strategy">
+                <img src="q2.jpg" alt="Strategy Planning">
+                <img src="q3.jpg" alt="Price Planning">
+                <img src="q4.jpeg" alt="Strategic Pricing"> 
+                <img src="q1.jpg" alt="Price Strategy">
+                <img src="q8.jpg" alt="Strategy Development">
+                <img src="q9.jpg" alt="Pricing Plans">
+                <img src="q10.jpg" alt="Strategic Analysis">
+            </div>
+        </div>
+        <div class="point2">
+            <h3 class="point3">Pricing Strategy</h3>
+            <p class="point-text">Set specific rules and conditions based on your business objectives. Customize your pricing strategies according to factors like seasonality, product demand, and customer behavior to optimize your revenue while keeping costs under control.</p>
+        </div>
+    </div>
+    
+    <div class="point1">
+        <div class="point2">
+            <h3 class="point3">Historical Data Insights</h3>
+            <p class="point-text">Leverage past pricing data to make informed decisions. Historical data allows you to understand pricing trends, spot patterns in sales, and apply lessons learned to future pricing strategies, improving forecasting accuracy.</p>
+        </div>
+        <div class="image-container">
+            <div class="image-scroll">
+                <img src="q8.jpg" alt="Historical Data Insights">
+                <img src="q3.jpg" alt="Data Analysis">
+                <img src="q2.jpg" alt="Historical Analysis">
+                <img src="q4.jpeg" alt="Data Insights"> 
+                <img src="q1.jpg" alt="Historical Trends">
+                <img src="q7.jpg" alt="Data Processing">
+                <img src="q9.jpg" alt="Insight Generation">
+                <img src="q10.jpg" alt="Analysis Tools">
+            </div>
+        </div>
+    </div>
+    
+    <div class="point1">
+        <div class="image-container">
+            <div class="image-scroll">
+                <img src="q9.jpg" alt="Manual & Automated Adjustments">
+                <img src="q4.jpeg" alt="Price Adjustments"> 
+                <img src="q2.jpg" alt="Automation Tools">
+                <img src="q3.jpg" alt="Adjustment Strategy">
+                <img src="q1.jpg" alt="Pricing Control">
+                <img src="q7.jpg" alt="Automated Pricing">
+                <img src="q8.jpg" alt="Price Management">
+                <img src="q10.jpg" alt="Control Systems">
+            </div>
+        </div>
+        <div class="point2">
+            <h3 class="point3">Manual & Automated Adjustments</h3>
+            <p class="point-text">Adjust your prices either manually or through automated rules. This flexibility ensures you can make quick changes based on real-time market shifts or set predefined triggers to adjust pricing without constant oversight.</p>
+        </div>
+    </div>
+    
+    <div class="point1">
+        <div class="point2">
+            <h3 class="point3">Increased Profitability & Competitiveness</h3>
+            <p class="point-text">By optimizing pricing, you can enhance your profitability and ensure your business remains competitive. Dynamic pricing strategies help maximize revenue, improve customer retention, and ensure your products are priced effectively against competitors.</p>
+        </div>
+        <div class="image-container">
+            <div class="image-scroll">
+                <img src="q10.jpg" alt="Increased Profitability">
+                <img src="q1.jpg" alt="Profitability Analysis">
+                <img src="q3.jpg" alt="Business Growth">
+                <img src="q4.jpeg" alt="Competitive Edge"> 
+                <img src="q7.jpg" alt="Market Success">
+                <img src="q2.jpg" alt="Revenue Growth">
+                <img src="q8.jpg" alt="Business Strategy">
+                <img src="q9.jpg" alt="Market Leadership">
+            </div>
+        </div>
+    </div>
+
+    <footer class="foot">
+        <div class="foot1">
+            <div class="foot2">
+                <div class="foot-title">About</div>
+                <div><a href="about.html" class="foot1_1">About us</a></div>
+                <div><a href="contact.html" class="foot1_1">Contact us</a></div>
+            </div>
+            <div class="foot2">
+                <div class="foot-title">Consumer Policy</div>
+                <div><a href="tou.html" class="foot1_1">Terms of Use</a></div>
+                <div><a href="security.html" class="foot1_1">Security</a></div>
+                <div><a href="Privacy.html" class="foot1_1">Privacy</a></div>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2025 DPP - Dynamic Price Positioning. All Rights Reserved.
+        </div>
+    </footer>
+    
+</body>
+</html>

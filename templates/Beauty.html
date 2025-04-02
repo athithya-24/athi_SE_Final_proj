@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Beauty</title>
+    <style>
+        :root {
+            --primary-color: #822727;
+            --primary-color-light: rgba(130, 39, 39, 0.8);
+            --secondary-color: #053443;
+            --accent-color: #df3c3c;
+            --text-light: #ffffff;
+            --text-dark: #333333;
+            --text-muted: #666666;
+            --background-light: #f8f9fa;
+            --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rajdhani', sans-serif;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        } 
+        
+        body {
+            background-color: var(--background-light);
+            line-height: 1.6;
+            color: var(--text-dark);
+        }
+        
+        /* Header Styles */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            height: 80px;
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            width: 100%;
+            position: fixed;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: all 0.5s ease;
+        }
+        
+        .header:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .logo {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--text-light);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 2px;
+            font-family: 'Kanit', sans-serif;
+            transition: var(--transition);
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-light);
+            font-size: 1.3rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+            letter-spacing: 0.5px;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+        
+        .nav-link:hover {
+            color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .auth-link {
+            background-color: transparent;
+            border: 2px solid var(--text-light);
+            border-radius: 30px;
+            padding: 0.5rem 1.8rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .auth-link:hover {
+            background-color: var(--text-light);
+            color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+        /* Search Bar Styles */
+        .search-container {
+            padding: 100px 5% 0;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .search-bar {
+            display: flex;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--secondary-color);
+            border-radius: 30px 0 0 30px;
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 8px rgba(223, 60, 60, 0.3);
+        }
+
+        .search-button {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            border: none;
+            border-radius: 0 30px 30px 0;
+            padding: 0 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .search-button:hover {
+            background-color: var(--accent-color);
+        }
+
+        .search-results {
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: var(--text-light);
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            display: none;
+            text-align: center;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .hidden {
+            display: none;
+        }
+        
+        /* Products Grid Section */
+        .products-section {
+            padding: 20px 5% 50px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 3.5rem;
+            color: var(--secondary-color);
+            position: relative;
+            padding-bottom: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: 'Kanit', sans-serif;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 4px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+        
+        .section-title::before {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background-color: var(--accent-color);
+            border-radius: 2px;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+        }
+        
+        .product-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 18px 32px rgba(0, 0, 0, 0.18);
+        }
+        
+        .product-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: var(--primary-color);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s ease;
+        }
+        
+        .product-card:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 280px;
+            object-fit: contain;
+            display: block;
+            transition: var(--transition);
+            padding: 10px;
+        }
+        
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+        
+        .product-details {
+            padding: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            background: linear-gradient(to right, rgba(248, 249, 250, 0.6), rgba(255, 255, 255, 0.9));
+        }
+        
+        .product-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            background-color: rgba(223, 60, 60, 0.1);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            transition: var(--transition);
+        }
+        
+        .product-card:hover .product-price {
+            background-color: var(--accent-color);
+            color: var(--text-light);
+            transform: scale(1.05);
+        }
+        
+        /* Add to cart button */
+        .product-card .add-to-cart {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            border: none;
+            border-radius: 30px;
+            padding: 0.6rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            opacity: 0;
+            z-index: 10;
+        }
+        
+        .product-card:hover .add-to-cart {
+            bottom: 20px;
+            opacity: 1;
+        }
+        
+        .product-card .add-to-cart:hover {
+            background-color: var(--accent-color);
+            transform: translateX(-50%) scale(1.1);
+        }
+        
+        /* Quick view overlay */
+        .product-card .quick-view {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(5, 52, 67, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 5;
+        }
+        
+        .product-card:hover .quick-view {
+            opacity: 1;
+        }
+        
+        .quick-view-btn {
+            background-color: var(--text-light);
+            color: var(--secondary-color);
+            border: none;
+            border-radius: 30px;
+            padding: 0.8rem 1.8rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .quick-view-btn:hover {
+            background-color: var(--accent-color);
+            color: var(--text-light);
+            transform: scale(1.1);
+        }
+        
+            /* Footer Styles */
+            .foot {
+                background-color: var(--primary-color);
+                margin-top: 100px;
+                position: relative;
+                padding-bottom: 30px;
+                color: var(--text-light);
+            }
+            
+            .foot:before {
+                content: '';
+                position: absolute;
+                top: -30px;
+                left: 0;
+                right: 0;
+                height: 30px;
+                background-color: var(--primary-color);
+                clip-path: polygon(0 100%, 100% 100%, 50% 0);
+            }
+            
+            .foot:hover {
+                background-color: var(--secondary-color);
+                transition: background-color 0.5s ease;
+            }
+            
+            .foot1 {
+                padding-top: 60px;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                min-height: 280px;
+                max-width: 1200px;
+                margin: 0 auto;
+                font-size: 20px;
+            }
+            
+            .foot2 {
+                display: flex;
+                flex-direction: column;
+                row-gap: 18px;
+                padding: 0 20px;
+            }
+            
+            .foot-title {
+                font-size: 30px;
+                font-weight: 600;
+                margin-bottom: 20px;
+                position: relative;
+                padding-bottom: 15px;
+                letter-spacing: 1px;
+                font-family: 'Kanit', sans-serif;
+            }
+            
+            .foot-title:after {
+                content: '';
+                position: absolute;
+                width: 50px;
+                height: 3px;
+                background-color: #fff;
+                bottom: 0;
+                left: 0;
+                transition: width 0.4s ease;
+            }
+            
+            .foot2:hover .foot-title:after {
+                width: 80px;
+                background-color: var(--accent-color);
+            }
+            
+            .foot1_1 {
+                text-decoration: none;
+                color: #fff;
+                font-size: 18px;
+                transition: all 0.3s ease;
+                display: inline-block;
+                position: relative;
+                padding-left: 0;
+            }
+            
+            .foot1_1:before {
+                content: '→';
+                position: absolute;
+                left: -20px;
+                opacity: 0;
+                transition: all 0.3s ease;
+            }
+            
+            .foot1_1:hover {
+                padding-left: 25px;
+                color: var(--accent-color);
+            }
+            
+            .foot1_1:hover:before {
+                left: 0;
+                opacity: 1;
+            }
+            
+            .copyright {
+                text-align: center;
+                color: rgba(255, 255, 255, 0.8);
+                padding-top: 25px;
+                border-top: 1px solid rgba(255, 255, 255, 0.2);
+                margin-top: 30px;
+                font-size: 16px;
+                max-width: 1200px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            /* Newsletter section */
+            .newsletter {
+                background-color: rgba(255, 255, 255, 0.1);
+                padding: 30px;
+                border-radius: 10px;
+                margin-top: 40px;
+                max-width: 1200px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .newsletter-title {
+                font-size: 24px;
+                margin-bottom: 15px;
+                font-weight: 600;
+            }
+            
+            .newsletter-form {
+                display: flex;
+                gap: 10px;
+            }
+            
+            .newsletter-input {
+                flex: 1;
+                padding: 12px 15px;
+                border: none;
+                border-radius: 5px;
+                background-color: rgba(255, 255, 255, 0.2);
+                color: var(--text-light);
+            }
+            
+            .newsletter-input::placeholder {
+                color: rgba(255, 255, 255, 0.7);
+            }
+            
+            .newsletter-button {
+                padding: 12px 25px;
+                background-color: var(--accent-color);
+                color: var(--text-light);
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-weight: 600;
+                transition: var(--transition);
+            }
+            
+            .newsletter-button:hover {
+                background-color: var(--text-light);
+                color: var(--accent-color);
+                transform: translateY(-3px);
+            }
+            
+            /* Social media links */
+            .social-links {
+                display: flex;
+                gap: 15px;
+                margin-top: 20px;
+            }
+            
+            .social-link {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background-color: rgba(255, 255, 255, 0.2);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: var(--transition);
+            }
+            
+            .social-link:hover {
+                background-color: var(--accent-color);
+                transform: translateY(-5px);
+            }
+            
+            /* Back to top button */
+            .back-to-top {
+                position: fixed;
+                bottom: 30px;
+                right: 30px;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background-color: var(--primary-color);
+                color: var(--text-light);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                opacity: 0;
+                visibility: hidden;
+                transition: var(--transition);
+                z-index: 999;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            }
+            
+            .back-to-top.visible {
+                opacity: 1;
+                visibility: visible;
+            }
+            
+            .back-to-top:hover {
+                background-color: var(--accent-color);
+                transform: translateY(-5px);
+            }
+            
+            /* Responsive Styles */
+            @media (max-width: 1024px) {
+                .products-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+                
+                .section-title {
+                    font-size: 2.4rem;
+                }
+                
+                .logo {
+                    font-size: 2.5rem;
+                }
+            }
+            
+            @media (max-width: 768px) {
+                .products-grid {
+                    grid-template-columns: 1fr;
+                    max-width: 500px;
+                    margin: 0 auto;
+                }
+                
+                .foot1 {
+                    flex-direction: column;
+                    padding: 40px 30px;
+                    row-gap: 40px;
+                }
+                
+                .nav-links {
+                    gap: 1.5rem;
+                }
+                
+                .newsletter-form {
+                    flex-direction: column;
+                }
+                .search-container {
+                    align-items: center;
+                }
+            }
+            
+            @media (max-width: 480px) {
+                .header {
+                    flex-direction: column;
+                    height: auto;
+                    padding: 1rem 5%;
+                }
+                
+                .nav-links {
+                    margin: 1rem 0;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 0.8rem;
+                }
+                
+                .products-section {
+                    padding-top: 200px;
+                }
+                
+                .section-title {
+                    font-size: 2rem;
+                }
+                
+                .product-card .add-to-cart {
+                    opacity: 1;
+                    bottom: 15px;
+                }
+                
+                .quick-view {
+                    display: none;
+                }
+                .search-container {
+                    padding-top: 180px;
+                }
+                .products-section {
+                    padding-top: 20px;
+                }
+            }
+            </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">DPP</div>
+        <nav class="nav-links">
+            <div><a href="{{ url_for('home') }}" class="nav-link">Home</a></div>
+            <div><a href="{{ url_for('store') }}" class="nav-link">Store</a></div>
+            <div><a href="blog.html" class="nav-link">Blog</a></div>
+            <div><a href="{{ url_for('contact')}}"  class="nav-link">Contact</a></div>
+        </nav>
+        <div>
+            {% if current_user.is_authenticated %}
+                <a href="#" class="nav-link auth-link">Welcome, {{ current_user.username }}</a>
+                <a href="{{ url_for('logout') }}" class="nav-link auth-link">Logout</a>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="nav-link auth-link">Login / Sign Up</a>
+            {% endif %}    
+            </div>    
+    </header>
+    <!-- New HTML for search container -->
+    <div class="search-container">
+        <div class="search-bar">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search products...">
+            <button id="searchButton" class="search-button">Search</button>
+        </div>
+        <div id="searchResults" class="search-results">
+            <!-- Search results message will appear here -->
+        </div>
+    </div>
+
+    <section class="products-section">
+        <h2 class="section-title">Featured Products</h2>
+        <div class="products-grid" id="productsGrid">
+            <!-- Product 1 -->
+            <div class="product-card">
+                <img src="{{ url_for('static', filename='images/be1.jpg') }}" alt="Product 1" class="product-image">
+                <div class="product-details">
+                    <h3 class="product-title">Face Gel</h3>
+                    <span class="product-price">₹1,299</span>
+                </div>
+            </div>
+
+            <!-- Product 2 -->
+            <div class="product-card">
+                <img src="{{ url_for('static', filename='images/be2.jpg') }}"  alt="Product 2" class="product-image">
+                <div class="product-details">
+                    <h3 class="product-title">Lip Stick Pink</h3>
+                    <span class="product-price">₹650</span>
+                </div>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="product-card">
+                <img src="{{ url_for('static', filename='images/be3.jpg') }}"  alt="Product 3" class="product-image">
+                <div class="product-details">
+                    <h3 class="product-title">Makeup Set</h3>
+                    <span class="product-price">₹6,500</span>
+                </div>
+            </div>
+
+            <!-- Product 4 -->
+            <div class="product-card">
+                <img src="{{ url_for('static', filename='images/be4.jpg') }}"  alt="Product 4" class="product-image">
+                <div class="product-details">
+                    <h3 class="product-title">Kajal Black</h3>
+                    <span class="product-price">₹380</span>
+                </div>
+            </div>
+
+            <!-- Product 5 -->
+            <div class="product-card">
+                <img src="{{ url_for('static', filename='images/be5.jpg') }}"  alt="Product 5" class="product-image">
+                <div class="product-details">
+                    <h3 class="product-title">Makeup Kit</h3>
+                    <span class="product-price">₹2,499</span>
+                </div>
+            </div>
+
+            <!-- Product 6 -->
+            <div class="product-card">
+                <img src="{{ url_for('static', filename='images/be6.jpg') }}"  alt="Product 6" class="product-image">
+                <div class="product-details">
+                    <h3 class="product-title">Lip Stick Red</h3>
+                    <span class="product-price">₹750</span>
+                </div>
+            </div>
+
+            <!-- Product 7 -->
+            <div class="product-card">
+                <img src="{{ url_for('static', filename='images/be7.jpg') }}"  alt="Product 7" class="product-image">
+                <div class="product-details">
+                    <h3 class="product-title">Sunscreen Gel</h3>
+                    <span class="product-price">₹350</span>
+                </div>
+            </div>
+
+            <!-- Product 8 -->
+            <div class="product-card">
+                <img src="{{ url_for('static', filename='images/be8.jpg') }}"  alt="Product 8" class="product-image">
+                <div class="product-details">
+                    <h3 class="product-title">Lip Liner</h3>
+                    <span class="product-price">₹960</span>
+                </div>
+            </div>
+
+            <!-- Product 9 -->
+            <div class="product-card">
+                <img src="{{ url_for('static', filename='images/be9.jpg') }}"  alt="Product 9" class="product-image">
+                <div class="product-details">
+                    <h3 class="product-title">Makeup Brushes</h3>
+                    <span class="product-price">₹3,999</span>
+                </div>
+            </div>
+
+            <!-- Product 10 -->
+            <div class="product-card">
+                <img src="{{ url_for('static', filename='images/be10.jpg') }}"  alt="Product 10" class="product-image">
+                <div class="product-details">
+                    <h3 class="product-title">Eye Lasher</h3>
+                    <span class="product-price">₹730</span>
+                </div>
+            </div>
+
+            <!-- Product 11 -->
+            <div class="product-card">
+                <img src="{{ url_for('static', filename='images/be11.jpg') }}"  alt="Product 11" class="product-image">
+                <div class="product-details">
+                    <h3 class="product-title">Aloe skin Gel</h3>
+                    <span class="product-price">₹580</span>
+                </div>
+            </div>
+
+            <!-- Product 12 -->
+            <div class="product-card">
+                <img src="{{ url_for('static', filename='images/be12.jpg') }}"  alt="Product 12" class="product-image">
+                <div class="product-details">
+                    <h3 class="product-title">Eye Lasher Kit</h3>
+                    <span class="product-price">₹1,999</span>
+                </div>
+            </div>
+
+            <!-- Product 13 -->
+            <div class="product-card">
+                <img src="{{ url_for('static', filename='images/be13.jpg') }}"  alt="Product 13" class="product-image">
+                <div class="product-details">
+                    <h3 class="product-title">Hand Makeup Kit</h3>
+                    <span class="product-price">₹1,540</span>
+                </div>
+            </div>
+
+            <!-- Product 14 -->
+            <div class="product-card">
+                <img src="{{ url_for('static', filename='images/be14.jpg') }}"  alt="Product 14" class="product-image">
+                <div class="product-details">
+                    <h3 class="product-title">Fox Skin Gel</h3>
+                    <span class="product-price">₹999</span>
+                </div>
+            </div>
+
+            <!-- Product 15 -->
+            <div class="product-card">
+                <img src="{{ url_for('static', filename='images/be15.jpg') }}"  alt="Product 15" class="product-image">
+                <div class="product-details">
+                    <h3 class="product-title">Lip Stick Brown</h3>
+                    <span class="product-price">₹799</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="foot">
+        <div class="foot1">
+            <div class="foot2">
+                <div class="foot-title">About</div>
+                <div><a href="about.html" class="foot1_1">About us</a></div>
+                <div><a href="contact.html" class="foot1_1">Contact us</a></div>
+            </div>
+            <div class="foot2">
+                <div class="foot-title">Consumer Policy</div>
+                <div><a href="tou.html" class="foot1_1">Terms of Use</a></div>
+                <div><a href="security.html" class="foot1_1">Security</a></div>
+                <div><a href="Privacy.html" class="foot1_1">Privacy</a></div>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2025 DPP - Dynamic Price Positioning. All Rights Reserved.
+        </div>
+    </footer>
+    <!-- New JavaScript for search functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const searchButton = document.getElementById('searchButton');
+            const searchResults = document.getElementById('searchResults');
+            const productCards = document.querySelectorAll('.product-card');
+            
+            // Function to perform search
+            function performSearch() {
+                const searchTerm = searchInput.value.trim().toLowerCase();
+                let matchFound = false;
+                let visibleCount = 0;
+                
+                // If search term is empty, show all products
+                if (searchTerm === '') {
+                    productCards.forEach(card => {
+                        card.classList.remove('hidden');
+                    });
+                    searchResults.style.display = 'none';
+                    return;
+                }
+                
+                // Filter products based on search term
+                productCards.forEach(card => {
+                    const productTitle = card.querySelector('.product-title').textContent.toLowerCase();
+                    
+                    if (productTitle.includes(searchTerm)) {
+                        card.classList.remove('hidden');
+                        matchFound = true;
+                        visibleCount++;
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+                
+                // Display search results message
+                searchResults.style.display = 'block';
+                if (matchFound) {
+                    searchResults.textContent = `Found ${visibleCount} product(s) matching "${searchInput.value}"`;
+                } else {
+                    searchResults.textContent = `No products found matching "${searchInput.value}"`;
+                }
+            }
+            
+            // Search button click event
+            searchButton.addEventListener('click', performSearch);
+            
+            // Enter key press in search input
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!-- New CSS for search functionality -->
+<style>
+    /* Search Bar Styles */
+    .search-container {
+        padding: 100px 5% 0;
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .search-bar {
+        display: flex;
+        width: 100%;
+        max-width: 400px;
+        margin-bottom: 20px;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid var(--secondary-color);
+        border-radius: 30px 0 0 30px;
+        font-size: 1rem;
+        outline: none;
+        transition: var(--transition);
+    }
+
+    .search-input:focus {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 8px rgba(223, 60, 60, 0.3);
+    }
+
+    .search-button {
+        background-color: var(--primary-color);
+        color: var(--text-light);
+        border: none;
+        border-radius: 0 30px 30px 0;
+        padding: 0 20px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: var(--transition);
+    }
+
+    .search-button:hover {
+        background-color: var(--accent-color);
+    }
+
+    .search-results {
+        width: 100%;
+        max-width: 400px;
+        padding: 10px;
+        margin-bottom: 20px;
+        background-color: var(--text-light);
+        border-radius: 10px;
+        box-shadow: var(--card-shadow);
+        display: none;
+        text-align: center;
+        font-weight: 500;
+        color: var(--text-dark);
+    }
+
+    .hidden {
+        display: none;
+    }
+</style>
+
+<!-- Added to responsive media queries -->
+<style>
+    @media (max-width: 768px) {
+        .search-container {
+            align-items: center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .search-container {
+            padding-top: 180px;
+        }
+        .products-section {
+            padding-top: 20px;
+        }
+    }
+</style>
+
+<!-- New HTML for search container -->
+<div class="search-container">
+    <div class="search-bar">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search products...">
+        <button id="searchButton" class="search-button">Search</button>
+    </div>
+    <div id="searchResults" class="search-results">
+        <!-- Search results message will appear here -->
+    </div>
+</div>
+
+<!-- Add id to products grid for JavaScript reference -->
+<div class="products-grid" id="productsGrid">
+
+<!-- New JavaScript for search functionality -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+        const searchResults = document.getElementById('searchResults');
+        const productCards = document.querySelectorAll('.product-card');
+        
+        // Function to perform search
+        function performSearch() {
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            let matchFound = false;
+            let visibleCount = 0;
+            
+            // If search term is empty, show all products
+            if (searchTerm === '') {
+                productCards.forEach(card => {
+                    card.classList.remove('hidden');
+                });
+                searchResults.style.display = 'none';
+                return;
+            }
+            
+            // Filter products based on search term
+            productCards.forEach(card => {
+                const productTitle = card.querySelector('.product-title').textContent.toLowerCase();
+                
+                if (productTitle.includes(searchTerm)) {
+                    card.classList.remove('hidden');
+                    matchFound = true;
+                    visibleCount++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+            
+            // Display search results message
+            searchResults.style.display = 'block';
+            if (matchFound) {
+                searchResults.textContent = `Found ${visibleCount} product(s) matching "${searchInput.value}"`;
+            } else {
+                searchResults.textContent = `No products found matching "${searchInput.value}"`;
+            }
+        }
+        
+        // Search button click event
+        searchButton.addEventListener('click', performSearch);
+        
+        // Enter key press in search input
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+    });
+</script>
