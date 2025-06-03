@@ -1,9 +1,0 @@
-/venv
-/unit
-/static
-/instance
-/__pycache__
-*.db
-user
-train
-store.b
