@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security - DPP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Kanit:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style> 
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Rajdhani', sans-serif;
+    }
+    
+    :root {
+        --primary-color: #822727;
+        --secondary-color: #053443;
+        --accent-color: #e67e22;
+        --text-light: #fff;
+        --text-dark: #333;
+        --background-light: #f9f9f9;
+        --transition: all 0.3s ease;
+    }
+    
+    html {
+        scroll-behavior: smooth;
+    } 
+    
+    body {
+        background-color: var(--background-light);
+        color: var(--text-dark);
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+    }
+    
+    /* Header Styles */
+    .header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 5%;
+        background-color: var(--primary-color);
+        color: var(--text-light);
+        width: 100%;
+        position: fixed;
+        z-index: 100;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        transition: var(--transition);
+    }
+    
+    #h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--text-light);
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        letter-spacing: 2px;
+    }
+    
+    .h2 {
+        display: flex;
+        flex-direction: row;
+        column-gap: 30px;
+        align-items: center;
+    }
+    
+    .h2_1 {
+        text-decoration: none;
+        color: var(--text-light);
+        font-size: 1.2rem;
+        font-weight: 500;
+        padding: 8px 15px;
+        border-radius: 4px;
+        transition: var(--transition);
+        position: relative;
+    }
+    
+    .h2_1:after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 50%;
+        background-color: var(--text-light);
+        transition: var(--transition);
+    }
+    
+    .h2_1:hover:after {
+        width: 80%;
+        left: 10%;
+    }
+    
+    .h2_1:hover {
+        color: var(--text-light);
+        background-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
+    
+    .user-section {
+        display: flex;
+        align-items: center;
+    }
+    
+    .h3_1 {
+        text-decoration: none;
+        color: var(--text-light);
+        font-size: 1.1rem;
+        transition: var(--transition);
+        padding: 8px 15px;
+        border-radius: 4px;
+    }
+    
+    .h3_1:hover {
+        color: var(--text-light);
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .header:hover {
+        background-color: var(--secondary-color);
+    }
+    
+    /* Main Content Styles */
+    .main-content {
+        padding-top: 120px;
+        padding-bottom: 50px;
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .page-title {
+        font-size: 2.5rem;
+        margin-bottom: 30px;
+        color: var(--primary-color);
+        text-align: center;
+        font-weight: 600;
+        position: relative;
+        padding-bottom: 15px;
+    }
+    
+    .page-title:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 3px;
+        background-color: var(--accent-color);
+    }
+    
+    /* Security Content Styles */
+    .security-container {
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        transition: var(--transition);
+    }
+    
+    .security-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+    
+    .security-section {
+        margin-bottom: 30px;
+    }
+    
+    .security-section:last-child {
+        margin-bottom: 0;
+    }
+    
+    .section-title {
+        font-size: 1.8rem;
+        color: var(--primary-color);
+        margin-bottom: 15px;
+        font-weight: 600;
+        position: relative;
+        padding-bottom: 10px;
+    }
+    
+    .section-title:after {
+        content: '';
+        position: absolute;
+        width: 60px;
+        height: 3px;
+        background-color: var(--accent-color);
+        bottom: 0;
+        left: 0;
+    }
+    
+    .security-item {
+        display: flex;
+        margin-bottom: 20px;
+        align-items: flex-start;
+    }
+    
+    .security-icon {
+        font-size: 2rem;
+        color: var(--accent-color);
+        margin-right: 20px;
+        flex-shrink: 0;
+    }
+    
+    .security-content {
+        flex-grow: 1;
+    }
+    
+    .security-content h4 {
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+        color: var(--secondary-color);
+    }
+    
+    .security-content p {
+        margin-bottom: 10px;
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+    
+    /* Footer Styles */
+    .foot {
+        background-color: var(--primary-color);
+        margin-top: 100px;
+        position: relative;
+        padding-bottom: 30px;
+        color: var(--text-light);
+    }
+    
+    .foot:before {
+        content: '';
+        position: absolute;
+        top: -30px;
+        left: 0;
+        right: 0;
+        height: 30px;
+        background-color: var(--primary-color);
+        clip-path: polygon(0 100%, 100% 100%, 50% 0);
+    }
+    
+    .foot:hover {
+        background-color: var(--secondary-color);
+        transition: background-color 0.5s ease;
+    }
+    
+    .foot1 {
+        padding-top: 60px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        min-height: 280px;
+        max-width: 1200px;
+        margin: 0 auto;
+        font-size: 20px;
+    }
+    
+    .foot2 {
+        display: flex;
+        flex-direction: column;
+        row-gap: 18px;
+        padding: 0 20px;
+    }
+    
+    .foot-title {
+        font-size: 30px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        position: relative;
+        padding-bottom: 15px;
+        letter-spacing: 1px;
+        font-family: 'Kanit', sans-serif;
+    }
+    
+    .foot-title:after {
+        content: '';
+        position: absolute;
+        width: 50px;
+        height: 3px;
+        background-color: #fff;
+        bottom: 0;
+        left: 0;
+        transition: width 0.4s ease;
+    }
+    
+    .foot2:hover .foot-title:after {
+        width: 80px;
+        background-color: var(--accent-color);
+    }
+    
+    .foot1_1 {
+        text-decoration: none;
+        color: #fff;
+        font-size: 18px;
+        transition: all 0.3s ease;
+        display: inline-block;
+        position: relative;
+        padding-left: 0;
+    }
+    
+    .foot1_1:before {
+        content: '→';
+        position: absolute;
+        left: -20px;
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+    
+    .foot1_1:hover {
+        padding-left: 25px;
+        color: var(--accent-color);
+    }
+    
+    .foot1_1:hover:before {
+        left: 0;
+        opacity: 1;
+    }
+    
+    .copyright {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.8);
+        padding-top: 25px;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        margin-top: 30px;
+        font-size: 16px;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    /* Responsive Styles */
+    @media (max-width: 1024px) {
+        .header {
+            padding: 15px 3%;
+        }
+        
+        #h1 {
+            font-size: 2.2rem;
+        }
+        
+        .h2_1, .h3_1 {
+            font-size: 1rem;
+            padding: 6px 12px;
+        }
+        
+        .security-container {
+            padding: 30px;
+            margin: 0 20px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .header {
+            flex-direction: column;
+            padding: 15px 5%;
+            height: auto;
+        }
+        
+        #h1 {
+            margin-bottom: 15px;
+        }
+        
+        .h2 {
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .main-content {
+            padding-top: 180px;
+        }
+        
+        .security-item {
+            flex-direction: column;
+        }
+        
+        .security-icon {
+            margin-bottom: 15px;
+            margin-right: 0;
+        }
+        
+        .foot1 {
+            flex-direction: column;
+            padding: 40px 30px;
+            row-gap: 40px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .h2 {
+            column-gap: 10px;
+        }
+        
+        .h2_1, .h3_1 {
+            padding: 5px 8px;
+            font-size: 0.9rem;
+        }
+        
+        .page-title {
+            font-size: 2rem;
+        }
+        
+        .security-container {
+            padding: 20px;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+        }
+    }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div>
+            <span id="h1">DPP</span>
+        </div>
+        <div class="h2">
+            <div><a href="{{ url_for('home') }}" class="h2_1">Home</a></div>
+            <div><a href="{{ url_for('store') }}" class="h2_1">Store</a></div>
+            <div><a href="{{ url_for('blogs')}}" class="h2_1">Blog</a></div>
+            <div><a href="{{ url_for('contact')}}" class="h2_1">Contact</a></div>
+        </div>
+        <div class="user-section">
+            {% if current_user.is_authenticated %}
+                <h3 class="h3_1">Welcome, {{ current_user.username }} | <a href="{{ url_for('logout') }}" class="h3_1">Logout</a></h3>
+            {% else %}
+                <h3><a href="{{ url_for('register') }}" class="h3_1">Login/Sign Up</a></h3>
+            {% endif %}
+        </div>      
+    </div>
+    
+    <div class="main-content">
+        <h2 class="page-title">Security Policy</h2>
+        
+        <div class="security-container">
+            <div class="security-section">
+                <h3 class="section-title">Our Commitment to Security</h3>
+                <p>At Dynamic Price Prediction (DPP), we prioritize the security of your information. We employ industry-standard security measures to protect your personal and financial data against unauthorized access, alteration, disclosure, or destruction. Our security protocols are regularly updated to adapt to emerging threats and technological advancements.</p>
+            </div>
+            
+            <div class="security-section">
+                <h3 class="section-title">How We Protect Your Data</h3>
+                
+                <div class="security-item">
+                    <div class="security-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="security-content">
+                        <h4>Encryption</h4>
+                        <p>We use industry-standard SSL/TLS encryption to protect all data transmitted between your device and our servers. This ensures that your personal information, payment details, and usage data remain secure during transmission.</p>
+                    </div>
+                </div>
+                
+                <div class="security-item">
+                    <div class="security-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="security-content">
+                        <h4>Secure Infrastructure</h4>
+                        <p>Our systems are hosted in secure, state-of-the-art data centers with physical access controls, 24/7 monitoring, and redundant power supplies. We implement firewalls, intrusion detection systems, and regular security scans to protect against vulnerabilities.</p>
+                    </div>
+                </div>
+                
+                <div class="security-item">
+                    <div class="security-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <div class="security-content">
+                        <h4>Secure Authentication</h4>
+                        <p>We implement robust password policies and offer multi-factor authentication to provide an additional layer of security for your account. We recommend enabling this feature for enhanced protection.</p>
+                    </div>
+                </div>
+                
+                <div class="security-item">
+                    <div class="security-icon">
+                        <i class="fas fa-code-branch"></i>
+                    </div>
+                    <div class="security-content">
+                        <h4>Secure Development</h4>
+                        <p>Our development team follows secure coding practices and conducts regular code reviews to identify and address potential security issues before they can be exploited.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="security-section">
+                <h3 class="section-title">Regular Security Assessments</h3>
+                <p>We conduct regular security assessments and penetration tests to identify and address potential vulnerabilities in our systems. Our security team works diligently to ensure that our security measures remain effective against evolving threats.</p>
+            </div>
+            
+            <div class="security-section">
+                <h3 class="section-title">Employee Access Controls</h3>
+                <p>We implement strict access controls to ensure that only authorized personnel can access sensitive information. All employees undergo background checks and receive regular security training to maintain awareness of best practices and potential threats.</p>
+            </div>
+            
+            <div class="security-section">
+                <h3 class="section-title">Data Retention and Disposal</h3>
+                <p>We retain your data only for as long as necessary to provide our services and comply with legal obligations. When data is no longer needed, we securely dispose of it following industry best practices to prevent unauthorized access.</p>
+            </div>
+            
+            <div class="security-section">
+                <h3 class="section-title">Your Role in Security</h3>
+                <p>While we take extensive measures to protect your data, security is a shared responsibility. We recommend that you:</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Use strong, unique passwords for your DPP account</li>
+                    <li>Enable multi-factor authentication if available</li>
+                    <li>Keep your devices and software updated</li>
+                    <li>Be cautious of phishing attempts and never share your login credentials</li>
+                    <li>Log out of your account when using shared computers</li>
+                    <li>Contact us immediately if you suspect any unauthorized access to your account</li>
+                </ul>
+            </div>
+            
+            <div class="security-section">
+                <h3 class="section-title">Security Updates and Notifications</h3>
+                <p>We may occasionally update our security practices to address new threats or implement improved security measures. Significant changes to our security policies will be communicated to you through email notifications or announcements on our platform.</p>
+            </div>
+            
+            <div class="security-section">
+                <h3 class="section-title">Contact Us</h3>
+                <p>If you have any questions or concerns about our security practices, or if you notice any suspicious activity related to your account, please contact us immediately at <a href="mailto:athithyaprakash@gmail.com" style="color: var(--accent-color);">athithyaprakash@gmail.com</a> or call us at 7550094475.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="foot">
+        <div class="foot1">
+            <div class="foot2">
+                <div class="foot-title">About</div>
+                <div><a href="{{ url_for('aboutus')}}" class="foot1_1">About us</a></div>
+                <div><a href="{{ url_for('contact')}}" class="foot1_1">Contact us</a></div>
+            </div>
+            <div class="foot2">
+                <div class="foot-title">Consumer Policy</div>
+                <div><a href="{{ url_for('tou')}}" class="foot1_1">Terms of Use</a></div>
+                <div><a href="{{ url_for('security')}}" class="foot1_1">Security</a></div>
+                <div><a href="{{ url_for('privacys')}}" class="foot1_1">Privacy</a></div>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2025 DPP - Dynamic Price Positioning. All Rights Reserved.
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', function() {
+            const backToTopButton = document.querySelector('.back-to-top');
+            if (backToTopButton && window.pageYOffset > 300) {
+                backToTopButton.classList.add('visible');
+            } else if (backToTopButton) {
+                backToTopButton.classList.remove('visible');
+            }
+        });
+    </script>
+</body>
+</html>
