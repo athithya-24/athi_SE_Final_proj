@@ -30,7 +30,7 @@ Dynamic Price Prediction is a comprehensive web application that leverages machi
 * **Password Recovery**: Secure token-based password reset emails
 * **Contact System**: Direct communication channel with automated responses
 
-### 🛍 **E-commerce Platform**
+###  **E-commerce Platform**
 * **Product Catalog**: Complete product display with original and predicted prices
 * **Category Management**: Organized product categories with filtering capabilities
 * **User Dashboard**: Personalized user experience with protected routes
