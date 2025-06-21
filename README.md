@@ -6,31 +6,31 @@ Dynamic Price Prediction is a comprehensive web application that leverages machi
 
 ## Features
 
-### 🤖 **Machine Learning Price Prediction**
+###  **Machine Learning Price Prediction**
 * **Multi-Category Models**: Separate Random Forest models for different product categories (Electronics, Fashion, Luxury goods)
 * **Dynamic Pricing**: Real-time price predictions based on seasonal factors and market demand
 * **Intelligent Adjustments**: Category-specific pricing variations (Fashion: high seasonal variance, Electronics: stable pricing)
 * **Data Processing**: Excel file integration with automated data preprocessing and feature engineering
 
-### 🔐 **User Authentication & Security**
+###  **User Authentication & Security**
 * **Complete User Management**: Registration, login, logout with Flask-Login integration
 * **Password Security**: Bcrypt hashing with comprehensive password validation
 * **Email Verification**: Automated welcome emails and password reset functionality
 * **Session Management**: Secure user sessions with remember-me functionality
 
-### ⭐ **Product Review System**
+###  **Product Review System**
 * **User Reviews**: Add, update, and view product reviews with 5-star rating system
 * **Review Analytics**: Automatic calculation of average ratings and review counts
 * **Real-time Updates**: Dynamic review loading with AJAX integration
 * **User Interaction**: Personalized review management for logged-in users
 
-### 📧 **Email Communication**
+###  **Email Communication**
 * **SMTP Integration**: Gmail SMTP configuration for automated email services
 * **Welcome Messages**: Automated account creation confirmations
 * **Password Recovery**: Secure token-based password reset emails
 * **Contact System**: Direct communication channel with automated responses
 
-### 🛍️ **E-commerce Platform**
+### 🛍 **E-commerce Platform**
 * **Product Catalog**: Complete product display with original and predicted prices
 * **Category Management**: Organized product categories with filtering capabilities
 * **User Dashboard**: Personalized user experience with protected routes
